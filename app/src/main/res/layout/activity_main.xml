@@ -41,5 +41,31 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:id="@+id/textInputBirthdate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter birthdate"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="118dp"
+        android:layout_marginEnd="32dp"
+        app:endIconMode="custom"
+        app:endIconDrawable="@drawable/ic_baseline_edit_24"
+        android:layout_marginBottom="91dp"
+        app:startIconDrawable="@drawable/ic_baseline_date_range_24"
+        app:layout_constraintBottom_toTopOf="@+id/sendButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputNameSurname">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/textInputEditTextBirthdate"
+            android:editable="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
