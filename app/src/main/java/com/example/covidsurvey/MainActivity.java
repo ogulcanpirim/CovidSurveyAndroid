@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -15,6 +16,16 @@ import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClic
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.regex.Pattern;
 
 public class MainActivity extends AppCompatActivity {
@@ -59,13 +70,38 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
         //String arrays
-        String[] cities = {"Ankara", "İzmir", "İstanbul"};
+        //String[] cities = {"Ankara", "İzmir", "İstanbul"};
         String[] genders = {"Male", "Female"};
         String[] vaccineTypes = {"Sinovac", "Biontech", "Other"};
         String[] positiveCaseChoices = {"Yes", "No"};
+        ArrayList <String> citiesCountries  = new ArrayList<>();
+
+        try {
+            JSONObject obj = new JSONObject(loadJSONFromAsset());
+            Iterator<?> keys = obj.keys();
+
+            while( keys.hasNext() ) {
+                String key = (String)keys.next();
+                if ( obj.get(key) instanceof JSONArray ) {
+                    JSONArray jArray = obj.getJSONArray(key);
+                    for (int i=0; i < jArray.length(); i++)
+                    {
+                        try {
+                            citiesCountries.add(key + ": " + jArray.getString(i));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         //Adapters
-        cityAdapter = new ArrayAdapter<String>(this, R.layout.dropdown_item, cities);
+        cityAdapter = new ArrayAdapter<String>(this, R.layout.dropdown_item, citiesCountries);
         genderAdapter = new ArrayAdapter<String>(this, R.layout.dropdown_item, genders);
         vaccineAdapter = new ArrayAdapter<String>(this, R.layout.dropdown_item, vaccineTypes);
         positiveCaseAdapter = new ArrayAdapter<String>(this, R.layout.dropdown_item, positiveCaseChoices);
@@ -251,5 +287,20 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
+    }
+    public String loadJSONFromAsset() {
+        String json = null;
+        try {
+            InputStream is = getAssets().open("countriesToCities.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
     }
 }
