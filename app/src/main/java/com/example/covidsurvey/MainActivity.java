@@ -84,10 +84,11 @@ public class MainActivity extends AppCompatActivity {
                 String key = (String)keys.next();
                 if ( obj.get(key) instanceof JSONArray ) {
                     JSONArray jArray = obj.getJSONArray(key);
-                    for (int i=0; i < jArray.length(); i++)
+                    for (int i=0; i < jArray.length() % 10 ; i++)
                     {
                         try {
-                            citiesCountries.add(key + ": " + jArray.getString(i));
+                            if (!jArray.getString(i).equals(""))
+                                citiesCountries.add(key + ": " + jArray.getString(i));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
