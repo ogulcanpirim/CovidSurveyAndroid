@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
@@ -64,6 +65,22 @@ public class MainActivity extends AppCompatActivity {
         autoCompleteTextViewPositiveCase = findViewById(R.id.autoCompleteTextViewPositiveCase);
 
         sendButton = findViewById(R.id.sendButton);
+        sendButton.setEnabled(false);
+
+        /*
+        !(nameEditText.length() == 0)
+        &&
+        !(birthdateEditText.length() == 0)
+        &&
+        !(autoCompleteTextViewCity.length() == 0)
+        &&
+        !(autoCompleteTextViewGender.length() == 0)
+        &&
+        !(autoCompleteTextViewVaccineType.length() == 0)
+        &&
+        !(autoCompleteTextViewPositiveCase.length() == 0)
+        * */
+
 
         datePicker = MaterialDatePicker.Builder.datePicker()
                 .setTitleText("Select Birthdate").setSelection(MaterialDatePicker.todayInUtcMilliseconds())
@@ -143,6 +160,7 @@ public class MainActivity extends AppCompatActivity {
                 if(nameEditText.getText().length() > 0){
                     nameLayout.setError(null);
                 }
+                checkButton();
             }
 
             @Override
@@ -166,6 +184,7 @@ public class MainActivity extends AppCompatActivity {
                 if (birthdateEditText.length() > 0){
                     birthdateLayout.setError(null);
                 }
+                checkButton();
             }
         });
         autoCompleteTextViewCity.addTextChangedListener(new TextWatcher() {
@@ -184,6 +203,7 @@ public class MainActivity extends AppCompatActivity {
                 if (autoCompleteTextViewCity.length() > 0){
                     cityLayout.setError(null);
                 }
+                checkButton();
             }
         });
         autoCompleteTextViewGender.addTextChangedListener(new TextWatcher() {
@@ -202,6 +222,7 @@ public class MainActivity extends AppCompatActivity {
                 if(autoCompleteTextViewGender.length() > 0){
                     genderLayout.setError(null);
                 }
+                checkButton();
             }
         });
         autoCompleteTextViewVaccineType.addTextChangedListener(new TextWatcher() {
@@ -220,6 +241,7 @@ public class MainActivity extends AppCompatActivity {
                 if (autoCompleteTextViewVaccineType.length() > 0){
                     vaccineLayout.setError(null);
                 }
+                checkButton();
             }
         });
         autoCompleteTextViewPositiveCase.addTextChangedListener(new TextWatcher() {
@@ -238,6 +260,7 @@ public class MainActivity extends AppCompatActivity {
                 if (autoCompleteTextViewPositiveCase.length() > 0){
                     positiveCaseLayout.setError(null);
                 }
+                checkButton();
             }
         });
 
@@ -248,7 +271,6 @@ public class MainActivity extends AppCompatActivity {
                 handleSend();
             }
         });
-
     }
 
     public void openBirthdatePicker(){
@@ -289,6 +311,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
     public String loadJSONFromAsset() {
         String json = null;
         try {
@@ -303,5 +326,24 @@ public class MainActivity extends AppCompatActivity {
             return null;
         }
         return json;
+    }
+    void checkButton (){
+        if (TextUtils.isEmpty(nameLayout.getError()) &&
+                TextUtils.isEmpty(vaccineLayout.getError()) &&
+                TextUtils.isEmpty(positiveCaseLayout.getError()) &&
+                TextUtils.isEmpty(genderLayout.getError()) &&
+                TextUtils.isEmpty(cityLayout.getError()) &&
+                TextUtils.isEmpty(birthdateLayout.getError()) &&
+                !(nameEditText.getText().length() == 0) &&
+                !(birthdateEditText.getText().length() == 0) &&
+                !(autoCompleteTextViewCity.getText().length() == 0) &&
+                !(autoCompleteTextViewGender.getText().length() == 0) &&
+                !(autoCompleteTextViewVaccineType.getText().length() == 0) &&
+                !(autoCompleteTextViewPositiveCase.getText().length() == 0)){
+            sendButton.setEnabled(true);
+        }
+        else {
+            sendButton.setEnabled(false);
+        }
     }
 }
