@@ -13,3 +13,4 @@
 .externalNativeBuild
 .cxx
 local.properties
+/tests/node_modules
