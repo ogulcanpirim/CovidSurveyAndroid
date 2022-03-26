@@ -13,6 +13,4 @@
 .externalNativeBuild
 .cxx
 local.properties
-/tests/node_modules
-/tests/.env
 src/test/js/tests/node_modules
