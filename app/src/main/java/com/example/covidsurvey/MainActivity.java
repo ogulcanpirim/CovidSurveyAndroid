@@ -1,17 +1,25 @@
 package com.example.covidsurvey;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.icu.util.Calendar;
+import android.icu.util.TimeZone;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.Toast;
 
+import com.google.android.material.datepicker.CalendarConstraints;
+import com.google.android.material.datepicker.CompositeDateValidator;
+import com.google.android.material.datepicker.DateValidatorPointBackward;
+import com.google.android.material.datepicker.DateValidatorPointForward;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.textfield.TextInputEditText;
@@ -24,13 +32,9 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Dictionary;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.regex.Pattern;
 
 public class MainActivity extends AppCompatActivity {
-
 
     public TextInputLayout nameLayout, birthdateLayout, cityLayout, genderLayout, vaccineLayout, positiveCaseLayout;
     public TextInputEditText nameEditText,birthdateEditText;
@@ -39,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     public ArrayAdapter<String> cityAdapter, genderAdapter, vaccineAdapter, positiveCaseAdapter;
     public AutoCompleteTextView autoCompleteTextViewCity, autoCompleteTextViewGender, autoCompleteTextViewVaccineType, autoCompleteTextViewPositiveCase;
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,57 +71,13 @@ public class MainActivity extends AppCompatActivity {
 
         sendButton = findViewById(R.id.sendButton);
         sendButton.setEnabled(false);
+        setDatePicker();
 
-        /*
-        !(nameEditText.length() == 0)
-        &&
-        !(birthdateEditText.length() == 0)
-        &&
-        !(autoCompleteTextViewCity.length() == 0)
-        &&
-        !(autoCompleteTextViewGender.length() == 0)
-        &&
-        !(autoCompleteTextViewVaccineType.length() == 0)
-        &&
-        !(autoCompleteTextViewPositiveCase.length() == 0)
-        * */
-
-
-        datePicker = MaterialDatePicker.Builder.datePicker()
-                .setTitleText("Select Birthdate").setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-                .build();
-
-        //String arrays
-        //String[] cities = {"Ankara", "İzmir", "İstanbul"};
         String[] genders = {"Male", "Female"};
         String[] vaccineTypes = {"Sinovac", "Biontech", "Other"};
         String[] positiveCaseChoices = {"Yes", "No"};
         ArrayList <String> citiesCountries  = new ArrayList<>();
-
-        try {
-            JSONObject obj = new JSONObject(loadJSONFromAsset());
-            Iterator<?> keys = obj.keys();
-
-            while( keys.hasNext() ) {
-                String key = (String)keys.next();
-                if ( obj.get(key) instanceof JSONArray ) {
-                    JSONArray jArray = obj.getJSONArray(key);
-                    for (int i=0; i < jArray.length() % 10 ; i++)
-                    {
-                        try {
-                            if (!jArray.getString(i).equals(""))
-                                citiesCountries.add(key + ": " + jArray.getString(i));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            }
-
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        setupCitiesList (citiesCountries);
 
         //Adapters
         cityAdapter = new ArrayAdapter<String>(this, R.layout.dropdown_item, citiesCountries);
@@ -156,15 +117,23 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                if(nameEditText.getText().length() > 0){
-                    nameLayout.setError(null);
-                }
                 checkButton();
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
+                if(nameEditText.getText().length() > 0){
+                }
+                if (nameEditText.length() == 0){
+                    nameLayout.setError("Required*");
+                }
+                if (!nameEditText.getText().toString().matches("[a-zA-Z ]+")) {
+                    nameLayout.setError("illegal characters in name*");
+                }
+                else {
+                    nameLayout.setError(null);
+                }
+                checkButton();
 
             }
         });
@@ -183,6 +152,9 @@ public class MainActivity extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
                 if (birthdateEditText.length() > 0){
                     birthdateLayout.setError(null);
+                }
+                if (birthdateEditText.length() == 0){
+                    birthdateLayout.setError("Required*");
                 }
                 checkButton();
             }
@@ -203,6 +175,9 @@ public class MainActivity extends AppCompatActivity {
                 if (autoCompleteTextViewCity.length() > 0){
                     cityLayout.setError(null);
                 }
+                if (autoCompleteTextViewCity.length() == 0){
+                    cityLayout.setError("Required*");
+                }
                 checkButton();
             }
         });
@@ -221,6 +196,9 @@ public class MainActivity extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
                 if(autoCompleteTextViewGender.length() > 0){
                     genderLayout.setError(null);
+                }
+                if (autoCompleteTextViewGender.length() == 0){
+                    genderLayout.setError("Required*");
                 }
                 checkButton();
             }
@@ -241,6 +219,11 @@ public class MainActivity extends AppCompatActivity {
                 if (autoCompleteTextViewVaccineType.length() > 0){
                     vaccineLayout.setError(null);
                 }
+
+                if (autoCompleteTextViewVaccineType.length() == 0){
+                    vaccineLayout.setError("Required*");
+                }
+
                 checkButton();
             }
         });
@@ -260,6 +243,9 @@ public class MainActivity extends AppCompatActivity {
                 if (autoCompleteTextViewPositiveCase.length() > 0){
                     positiveCaseLayout.setError(null);
                 }
+                if (autoCompleteTextViewPositiveCase.length() == 0){
+                    positiveCaseLayout.setError("Required*");
+                }
                 checkButton();
             }
         });
@@ -268,7 +254,7 @@ public class MainActivity extends AppCompatActivity {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                handleSend();
+                Toast.makeText( getApplicationContext(), "Successful!", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -283,34 +269,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
-    public void handleSend(){
-        if (nameEditText.length() == 0){
-            nameLayout.setError("Required*");
-        }
-
-        if (birthdateEditText.length() == 0){
-            birthdateLayout.setError("Required*");
-        }
-
-        if (autoCompleteTextViewCity.length() == 0){
-            cityLayout.setError("Required*");
-        }
-
-        if (autoCompleteTextViewGender.length() == 0){
-            genderLayout.setError("Required*");
-        }
-
-        if (autoCompleteTextViewVaccineType.length() == 0){
-            vaccineLayout.setError("Required*");
-        }
-
-        if (autoCompleteTextViewPositiveCase.length() == 0){
-            positiveCaseLayout.setError("Required*");
-        }
-
-
-    }
 
     public String loadJSONFromAsset() {
         String json = null;
@@ -345,5 +303,56 @@ public class MainActivity extends AppCompatActivity {
         else {
             sendButton.setEnabled(false);
         }
+    }
+
+    void setupCitiesList (ArrayList citiesCountries ){
+        try {
+            JSONObject obj = new JSONObject(loadJSONFromAsset());
+            Iterator<?> keys = obj.keys();
+
+            while( keys.hasNext() ) {
+                String key = (String)keys.next();
+                if ( obj.get(key) instanceof JSONArray ) {
+                    JSONArray jArray = obj.getJSONArray(key);
+                    for (int i=0; i < jArray.length() % 10 ; i++)
+                    {
+                        try {
+                            if (!jArray.getString(i).equals(""))
+                                citiesCountries.add(key + ": " + jArray.getString(i));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    void setDatePicker (){
+        Calendar min = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+        min.set(1900, 01, 1);
+        min.getTimeInMillis();
+        Calendar max = Calendar.getInstance();
+
+        CalendarConstraints.Builder constraintsBuilderRange = new CalendarConstraints.Builder();
+        CalendarConstraints.DateValidator dateValidatorMin = DateValidatorPointForward.from(min.getTimeInMillis());
+        CalendarConstraints.DateValidator dateValidatorMax = DateValidatorPointBackward.before(max.getTimeInMillis());
+
+        ArrayList<CalendarConstraints.DateValidator> listValidators =
+                new ArrayList<CalendarConstraints.DateValidator>();
+        listValidators.add(dateValidatorMin);
+        listValidators.add(dateValidatorMax);
+        CalendarConstraints.DateValidator validators = CompositeDateValidator.allOf(listValidators);
+        constraintsBuilderRange.setValidator(validators);
+
+        datePicker = MaterialDatePicker.Builder.datePicker()
+                .setTitleText("Select Birthdate").setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                .setCalendarConstraints(constraintsBuilderRange.build())
+                .build();
     }
 }
