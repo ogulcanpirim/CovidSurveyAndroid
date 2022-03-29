@@ -16,3 +16,12 @@ local.properties
 /tests/node_modules
 /tests/.env
 src/test/js/tests/node_modules
+src/test/js/tests/.env
+
+**/.env
+
+/app/src/test/js/tests/node_modules
+/app/src/test/js/tests/mochawesome-repoort
+/app/src/test/js/tests/.env
+
+**/node_modules
