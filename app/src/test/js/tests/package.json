@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "mocha -r esm ./*.js -t 10000 --reporter mochawesome",
-    "test3": "mocha -r esm ./test_case_4.js -t 10000"
+    "test": "mocha -r esm ./*.js -t 60000 --reporter mochawesome",
+    "test3": "mocha -r esm ./test_case_4.js -t 60000"
   },
   "author": "",
   "license": "ISC",
