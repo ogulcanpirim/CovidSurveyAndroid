@@ -2,9 +2,10 @@
 CovidSurveyAndroid
 
 ### To run the tests do the following:
+Tests are in "/CovidSurveyAndroid/app/src/test/js/tests"
+- Install Android Studio and set it up
 - Build the .apk for the application
-- Create a .env file in tests directory
-- Put the path to the .apk file in .env as APK_PATH="/path-to-apk
-
+- Run the virtual device 
 - Run the appium server
-- Write tests and run node index.js
+- npm install webdriverio (in tests directory)
+- npm test (in tests directory)
