@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.google.android.material.datepicker.CalendarConstraints;
@@ -39,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     public TextInputLayout nameLayout, birthdateLayout, cityLayout, vaccineLayout, positiveCaseLayout;
     public TextInputEditText nameEditText,birthdateEditText;
     public Button sendButton;
+    public RadioGroup genderRadioGroup;
     public MaterialDatePicker datePicker;
     public ArrayAdapter<String> cityAdapter, vaccineAdapter, positiveCaseAdapter;
     public AutoCompleteTextView autoCompleteTextViewCity, autoCompleteTextViewVaccineType, autoCompleteTextViewPositiveCase;
@@ -59,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
 
         cityLayout = findViewById(R.id.textInputLayoutCity);
         autoCompleteTextViewCity = findViewById(R.id.autoCompleteTextViewCity);
+
+        genderRadioGroup = findViewById(R.id.radioGroup);
 
         vaccineLayout = findViewById(R.id.textInputLayoutVaccineType);
         autoCompleteTextViewVaccineType = findViewById(R.id.autoCompleteTextViewVaccineType);
@@ -176,6 +180,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        genderRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                checkButton();
+            }
+        });
+
         autoCompleteTextViewVaccineType.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -259,6 +270,7 @@ public class MainActivity extends AppCompatActivity {
         return json;
     }
     void checkButton (){
+
         if (TextUtils.isEmpty(nameLayout.getError()) &&
                 TextUtils.isEmpty(vaccineLayout.getError()) &&
                 TextUtils.isEmpty(positiveCaseLayout.getError()) &&
@@ -266,6 +278,7 @@ public class MainActivity extends AppCompatActivity {
                 TextUtils.isEmpty(birthdateLayout.getError()) &&
                 !(nameEditText.getText().length() == 0) &&
                 !(birthdateEditText.getText().length() == 0) &&
+                genderRadioGroup.getCheckedRadioButtonId() != -1 &&
                 !(autoCompleteTextViewCity.getText().length() == 0) &&
                 !(autoCompleteTextViewVaccineType.getText().length() == 0) &&
                 !(autoCompleteTextViewPositiveCase.getText().length() == 0)){
