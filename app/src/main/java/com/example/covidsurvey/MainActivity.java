@@ -36,12 +36,12 @@ import java.util.Iterator;
 
 public class MainActivity extends AppCompatActivity {
 
-    public TextInputLayout nameLayout, birthdateLayout, cityLayout, genderLayout, vaccineLayout, positiveCaseLayout;
+    public TextInputLayout nameLayout, birthdateLayout, cityLayout, vaccineLayout, positiveCaseLayout;
     public TextInputEditText nameEditText,birthdateEditText;
     public Button sendButton;
     public MaterialDatePicker datePicker;
-    public ArrayAdapter<String> cityAdapter, genderAdapter, vaccineAdapter, positiveCaseAdapter;
-    public AutoCompleteTextView autoCompleteTextViewCity, autoCompleteTextViewGender, autoCompleteTextViewVaccineType, autoCompleteTextViewPositiveCase;
+    public ArrayAdapter<String> cityAdapter, vaccineAdapter, positiveCaseAdapter;
+    public AutoCompleteTextView autoCompleteTextViewCity, autoCompleteTextViewVaccineType, autoCompleteTextViewPositiveCase;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -60,9 +60,6 @@ public class MainActivity extends AppCompatActivity {
         cityLayout = findViewById(R.id.textInputLayoutCity);
         autoCompleteTextViewCity = findViewById(R.id.autoCompleteTextViewCity);
 
-        genderLayout = findViewById(R.id.textInputLayoutGender);
-        autoCompleteTextViewGender = findViewById(R.id.autoCompleteTextViewGender);
-
         vaccineLayout = findViewById(R.id.textInputLayoutVaccineType);
         autoCompleteTextViewVaccineType = findViewById(R.id.autoCompleteTextViewVaccineType);
 
@@ -73,7 +70,6 @@ public class MainActivity extends AppCompatActivity {
         sendButton.setEnabled(false);
         setDatePicker();
 
-        String[] genders = {"Male", "Female"};
         String[] vaccineTypes = {"Sinovac", "Biontech", "Other"};
         String[] positiveCaseChoices = {"Yes", "No"};
         ArrayList <String> citiesCountries  = new ArrayList<>();
@@ -81,13 +77,11 @@ public class MainActivity extends AppCompatActivity {
 
         //Adapters
         cityAdapter = new ArrayAdapter<String>(this, R.layout.dropdown_item, citiesCountries);
-        genderAdapter = new ArrayAdapter<String>(this, R.layout.dropdown_item, genders);
         vaccineAdapter = new ArrayAdapter<String>(this, R.layout.dropdown_item, vaccineTypes);
         positiveCaseAdapter = new ArrayAdapter<String>(this, R.layout.dropdown_item, positiveCaseChoices);
 
 
         autoCompleteTextViewCity.setAdapter(cityAdapter);
-        autoCompleteTextViewGender.setAdapter(genderAdapter);
         autoCompleteTextViewVaccineType.setAdapter(vaccineAdapter);
         autoCompleteTextViewPositiveCase.setAdapter(positiveCaseAdapter);
 
@@ -181,28 +175,7 @@ public class MainActivity extends AppCompatActivity {
                 checkButton();
             }
         });
-        autoCompleteTextViewGender.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if(autoCompleteTextViewGender.length() > 0){
-                    genderLayout.setError(null);
-                }
-                if (autoCompleteTextViewGender.length() == 0){
-                    genderLayout.setError("Required*");
-                }
-                checkButton();
-            }
-        });
         autoCompleteTextViewVaccineType.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -289,13 +262,11 @@ public class MainActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(nameLayout.getError()) &&
                 TextUtils.isEmpty(vaccineLayout.getError()) &&
                 TextUtils.isEmpty(positiveCaseLayout.getError()) &&
-                TextUtils.isEmpty(genderLayout.getError()) &&
                 TextUtils.isEmpty(cityLayout.getError()) &&
                 TextUtils.isEmpty(birthdateLayout.getError()) &&
                 !(nameEditText.getText().length() == 0) &&
                 !(birthdateEditText.getText().length() == 0) &&
                 !(autoCompleteTextViewCity.getText().length() == 0) &&
-                !(autoCompleteTextViewGender.getText().length() == 0) &&
                 !(autoCompleteTextViewVaccineType.getText().length() == 0) &&
                 !(autoCompleteTextViewPositiveCase.getText().length() == 0)){
             sendButton.setEnabled(true);
