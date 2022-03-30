@@ -81,34 +81,65 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:inputType="none"
-                android:hint="Select City" />
+                android:hint="Select City"
+                android:inputType="none" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Gender"
+                android:textColor="#666666"
+                android:textSize="16sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayoutGender"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        <RadioGroup
+            android:id="@+id/radioGroup"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginStart="32dp"
-            android:layout_marginTop="8dp"
             android:layout_marginEnd="32dp"
-            app:errorEnabled="true"
-            app:errorIconDrawable="@drawable/ic_baseline_error_24"
+            android:orientation="horizontal"
+            android:background="@drawable/radio_group_background"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutCity"
-            app:startIconDrawable="@drawable/ic_gender_logo">
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutCity">
 
-            <AutoCompleteTextView
-                android:id="@+id/autoCompleteTextViewGender"
+            <RadioButton
+                android:id="@+id/radioButton"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:inputType="none"
-                android:hint="Select Gender" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:buttonTint="#6F00F8"
+                android:text="Male"
+                android:textAlignment="textStart"
+                android:textColor="#666666"
+                android:textSize="14sp" />
+
+            <RadioButton
+                android:id="@+id/femaleRadioButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:buttonTint="#6F00F8"
+                android:text="Female"
+                android:textAlignment="textStart"
+                android:textColor="#666666"
+                android:textSize="14sp" />
+
+            <RadioButton
+                android:id="@+id/radioButton4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:buttonTint="#6F00F8"
+                android:text="Other"
+                android:textColor="#666666"
+                android:textSize="14sp" />
+
+        </RadioGroup>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayoutVaccineType"
@@ -116,13 +147,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="32dp"
             app:errorEnabled="true"
             app:errorIconDrawable="@drawable/ic_baseline_error_24"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutGender"
+            app:layout_constraintTop_toBottomOf="@+id/radioGroup"
             app:startIconDrawable="@drawable/ic_vaccine_logo">
 
             <AutoCompleteTextView
@@ -130,8 +161,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:inputType="none"
-                android:hint="Select Vaccine Type" />
+                android:hint="Select Vaccine Type"
+                android:inputType="none" />
         </com.google.android.material.textfield.TextInputLayout>
 
 
